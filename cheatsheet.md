@@ -78,6 +78,19 @@ Inject in a Pod via `envFrom: [{configMapRef: {name: ...}}, {secretRef: {name: .
 Secret is base64-only by default → secure it with RBAC + encryption-at-rest + external managers.
 NEVER commit a Secret's YAML to git.
 
+## Volumes & persistent storage
+```bash
+kubectl apply -f pvc.yaml           # PVC = request for storage
+kubectl get pvc                     # STATUS: Bound = matched to a PV
+kubectl get pv                      # PV auto-provisioned by the StorageClass
+# Pod mounts it: volumes[].persistentVolumeClaim.claimName + containers[].volumeMounts[].mountPath
+```
+- Container FS is ephemeral (dies with Pod); PV lifecycle is independent → data survives.
+- **PV** = real storage, **PVC** = a Pod's claim/request, **StorageClass** = provisions PVs dynamically.
+- Access modes: RWO (one node RW) · ROX (many RO) · RWX (many RW, needs NFS/CephFS/cloud file).
+- Many concurrent writers → use a **database** (owns concurrency), not a shared volume.
+  Stateful pods (DB/Kafka/etc) → **StatefulSet**, each pod its own PVC.
+
 
 ## Handy flags
 - `-o wide` — more columns

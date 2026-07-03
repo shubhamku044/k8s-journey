@@ -74,3 +74,16 @@ no key needed). What secures it: **RBAC** (restrict who can read Secrets), **enc
 (EncryptionConfiguration encrypts etcd), careful handling (masked in describe/logs, stored in
 tmpfs on nodes), and/or an **external secret manager** (Vault, cloud KMS, Sealed Secrets). Never
 commit a Secret's base64 YAML to git — it's effectively plaintext.
+
+### Q: PV vs PVC vs StorageClass? Why does PVC data survive a Pod restart?
+PV = the actual storage in the cluster; PVC = a Pod's request/claim for storage; StorageClass =
+dynamically provisions a PV to satisfy a PVC. The container filesystem is ephemeral (dies with
+the Pod), but a PV's lifecycle is independent, so a new Pod mounting the same PVC sees the same
+data.
+
+### Q: Can many Pods write to one volume? How do writes stay correct?
+By default no — RWO restricts read-write to one node. Multi-node writes need RWX (NFS/CephFS/cloud
+file), and even then a filesystem gives no transactions/isolation, so concurrent writers corrupt
+data. Real systems keep app Pods **stateless** and route writes to **one database** that owns
+concurrency (transactions, locks, isolation). Genuinely stateful workloads use a **StatefulSet**
+where each Pod gets its own private PVC.

@@ -37,3 +37,14 @@ is not restarted — it's ephemeral and gets **replaced** by a new one (new name
 Only if a controller owns it. A **bare Pod** (created via `kubectl run`) is not recreated —
 nothing is watching it. A Pod managed by a **Deployment/ReplicaSet** is recreated automatically,
 because the controller enforces the desired replica count. That's where self-healing comes from.
+
+### Q: How does a Deployment self-heal? (the reconciliation loop)
+A Deployment creates a ReplicaSet, which holds a **desired** replica count. Its controller
+continuously compares desired vs **actual** running Pods. If a Pod dies, actual drops below
+desired, so the ReplicaSet creates a replacement to close the gap. It only creates the
+*difference* — delete one Pod, exactly one is recreated, not the whole set.
+
+### Q: Deployment vs ReplicaSet vs Pod?
+Deployment (what I talk to; manages rollouts) → ReplicaSet (enforces "keep N Pods alive") →
+Pod (the disposable running unit, named `web-<rs-hash>-<pod-id>`). Each new Pod gets a fresh
+random ID — you care about *how many* are running, never *which* specific Pods.

@@ -25,4 +25,15 @@ node honestly reports it can't run workloads yet. It becomes `Ready` on its own.
 A Pod is the smallest unit Kubernetes schedules — a wrapper around one or more containers that
 share a network identity (one IP), storage, and lifecycle. A container is just the running
 process; the Pod is the K8s object that wraps it. A Pod holds multiple containers only when a
-helper must share the main app's network/filesystem (sidecar pattern).
+helper must share the main app's network/filesystem (sidecar pattern). An app and its database
+do NOT belong in one Pod — separate services each get their own Pod.
+
+### Q: Can you "restart" a Pod?
+Two levels, don't confuse them: a **container** inside a Pod can be restarted in place by the
+kubelet if it crashes (per `restartPolicy`; visible in the `RESTARTS` column). A **Pod** itself
+is not restarted — it's ephemeral and gets **replaced** by a new one (new name, new IP).
+
+### Q: If you delete a Pod, does Kubernetes bring it back?
+Only if a controller owns it. A **bare Pod** (created via `kubectl run`) is not recreated —
+nothing is watching it. A Pod managed by a **Deployment/ReplicaSet** is recreated automatically,
+because the controller enforces the desired replica count. That's where self-healing comes from.

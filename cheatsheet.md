@@ -32,6 +32,7 @@ kubectl get pods                   # list
 kubectl get pods -o wide           # + IP, NODE
 kubectl describe pod <name>        # full detail; read Events: at the bottom
 kubectl logs <name>                # container stdout
+kubectl delete pod <name>          # delete (a bare Pod is NOT recreated)
 ```
 
 ## Handy flags

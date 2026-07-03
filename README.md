@@ -10,7 +10,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [03 — Deployments & ReplicaSets](lessons/03-deployments.md) — ✅ done
 - [04 — Services & networking](lessons/04-services.md) — ✅ done
 - [05 — ConfigMaps & Secrets](lessons/05-configmaps-secrets.md) — ✅ done
-- 06 — Volumes & persistent storage — 🚧 next
+- [06 — Volumes & persistent storage](lessons/06-volumes-storage.md) — ✅ done
+- 07 — Namespaces (organizing resources) — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

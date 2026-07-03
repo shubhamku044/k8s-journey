@@ -57,6 +57,15 @@ kubectl describe service web                   # Selector: app=web; Endpoints = 
 - `Endpoints:` auto-updates as Pods come and go → stable access despite ephemeral Pod IPs.
 - Also gives a stable **DNS name** (`web` / `web.default.svc.cluster.local`) = service discovery.
 
+```bash
+kubectl expose deployment web --type=NodePort --port=80   # external (dev): node-ip:30000-32767
+kubectl get service web                                   # PORT(S): 80:30904/TCP
+minikube service web                                      # open NodePort service in browser (mac: keep terminal open)
+minikube service web --url                                # just print the URL
+```
+Service types: **ClusterIP** (internal only) → **NodePort** (dev/test external) →
+**LoadBalancer** (production external, cloud). Each stacks on the previous.
+
 
 ## Handy flags
 - `-o wide` — more columns

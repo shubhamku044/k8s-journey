@@ -54,3 +54,10 @@ Pod IPs are ephemeral: a Pod that dies is replaced by a new one with a **new IP*
 hardcoded Pod IP breaks. And with multiple replicas there's no single IP to target. A Service
 provides one **stable virtual IP + DNS name** and **load-balances** across all Pods matching its
 **label selector**. Its Endpoints list auto-updates as Pods churn, so clients never notice.
+
+### Q: ClusterIP vs NodePort vs LoadBalancer?
+- **ClusterIP** (default): internal-only stable IP; service-to-service (app → DB).
+- **NodePort**: exposes the Service on a high port (30000–32767) on every node → external
+  dev/testing access.
+- **LoadBalancer**: provisions a cloud load balancer with a real external IP → production.
+Each builds on the previous (LoadBalancer → NodePort → ClusterIP).

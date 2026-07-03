@@ -61,3 +61,16 @@ provides one **stable virtual IP + DNS name** and **load-balances** across all P
   dev/testing access.
 - **LoadBalancer**: provisions a cloud load balancer with a real external IP → production.
 Each builds on the previous (LoadBalancer → NodePort → ClusterIP).
+
+### Q: Why separate config from the container image?
+So one image runs everywhere (dev/staging/prod) with environment-specific config supplied at
+runtime, and config changes don't require rebuilding/redeploying the image (12-factor app).
+ConfigMaps hold non-sensitive config; Secrets hold sensitive data. Both inject as env vars or
+mounted files.
+
+### Q: Is a Kubernetes Secret encrypted?
+No — by default it's only **base64-encoded**, which is trivially reversible (`base64 --decode`,
+no key needed). What secures it: **RBAC** (restrict who can read Secrets), **encryption at rest**
+(EncryptionConfiguration encrypts etcd), careful handling (masked in describe/logs, stored in
+tmpfs on nodes), and/or an **external secret manager** (Vault, cloud KMS, Sealed Secrets). Never
+commit a Secret's base64 YAML to git — it's effectively plaintext.

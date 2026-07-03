@@ -66,6 +66,18 @@ minikube service web --url                                # just print the URL
 Service types: **ClusterIP** (internal only) → **NodePort** (dev/test external) →
 **LoadBalancer** (production external, cloud). Each stacks on the previous.
 
+## ConfigMaps & Secrets (config separate from image)
+```bash
+kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
+kubectl create secret generic db-secret --from-literal=DB_PASSWORD=SuperSecret123
+kubectl get configmap app-config -o yaml
+kubectl get secret db-secret -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode; echo  # base64 != encryption
+kubectl exec <pod> -- env | grep -E 'APP|DB'      # verify injected env vars
+```
+Inject in a Pod via `envFrom: [{configMapRef: {name: ...}}, {secretRef: {name: ...}}]`.
+Secret is base64-only by default → secure it with RBAC + encryption-at-rest + external managers.
+NEVER commit a Secret's YAML to git.
+
 
 ## Handy flags
 - `-o wide` — more columns

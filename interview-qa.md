@@ -48,3 +48,9 @@ desired, so the ReplicaSet creates a replacement to close the gap. It only creat
 Deployment (what I talk to; manages rollouts) → ReplicaSet (enforces "keep N Pods alive") →
 Pod (the disposable running unit, named `web-<rs-hash>-<pod-id>`). Each new Pod gets a fresh
 random ID — you care about *how many* are running, never *which* specific Pods.
+
+### Q: Why is a Service necessary — what breaks if you use a Pod's IP directly?
+Pod IPs are ephemeral: a Pod that dies is replaced by a new one with a **new IP**, so any
+hardcoded Pod IP breaks. And with multiple replicas there's no single IP to target. A Service
+provides one **stable virtual IP + DNS name** and **load-balances** across all Pods matching its
+**label selector**. Its Endpoints list auto-updates as Pods churn, so clients never notice.

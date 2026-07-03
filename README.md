@@ -8,7 +8,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [01 — First cluster](lessons/01-first-cluster.md) — ✅ done
 - [02 — Pods](lessons/02-pods.md) — ✅ done
 - [03 — Deployments & ReplicaSets](lessons/03-deployments.md) — ✅ done
-- 04 — Services & networking — 🚧 next
+- [04 — Services & networking](lessons/04-services.md) — ✅ done
+- 05 — ConfigMaps & Secrets — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

@@ -35,6 +35,19 @@ kubectl logs <name>                # container stdout
 kubectl delete pod <name>          # delete (a bare Pod is NOT recreated)
 ```
 
+## Deployments (self-healing + scaling)
+```bash
+kubectl create deployment web --image=nginx   # Deployment -> ReplicaSet -> Pod(s)
+kubectl get deployments                        # desired vs ready
+kubectl get replicasets                        # the "keep N alive" counter (DESIRED/CURRENT/READY)
+kubectl get pods                               # names: web-<rs-hash>-<pod-id>
+kubectl scale deployment web --replicas=3      # change desired count with one command
+kubectl delete pod <name>                      # RS recreates ONE replacement to match desired
+```
+Rule: delete one Pod under a Deployment → exactly one replacement is created to restore the
+desired count. Pods are disposable (new random suffix each time); you care how many, not which.
+
+
 ## Handy flags
 - `-o wide` — more columns
 - `-w` — watch/stream changes

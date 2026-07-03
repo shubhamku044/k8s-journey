@@ -47,6 +47,16 @@ kubectl delete pod <name>                      # RS recreates ONE replacement to
 Rule: delete one Pod under a Deployment → exactly one replacement is created to restore the
 desired count. Pods are disposable (new random suffix each time); you care how many, not which.
 
+## Services (stable front door + load balancing)
+```bash
+kubectl expose deployment web --port=80        # create a ClusterIP Service in front of Pods
+kubectl get service web                        # shows CLUSTER-IP (stable virtual IP)
+kubectl describe service web                   # Selector: app=web; Endpoints = matching Pod IPs
+```
+- A Service routes to Pods by **label selector** (`app=web`), NOT by name/IP.
+- `Endpoints:` auto-updates as Pods come and go → stable access despite ephemeral Pod IPs.
+- Also gives a stable **DNS name** (`web` / `web.default.svc.cluster.local`) = service discovery.
+
 
 ## Handy flags
 - `-o wide` — more columns

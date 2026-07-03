@@ -9,7 +9,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [02 — Pods](lessons/02-pods.md) — ✅ done
 - [03 — Deployments & ReplicaSets](lessons/03-deployments.md) — ✅ done
 - [04 — Services & networking](lessons/04-services.md) — ✅ done
-- 05 — ConfigMaps & Secrets — 🚧 next
+- [05 — ConfigMaps & Secrets](lessons/05-configmaps-secrets.md) — ✅ done
+- 06 — Volumes & persistent storage — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

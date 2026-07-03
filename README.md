@@ -6,7 +6,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 
 ## Lessons
 - [01 — First cluster](lessons/01-first-cluster.md) — ✅ done
-- [02 — Pods](lessons/02-pods.md) — 🚧 in progress
+- [02 — Pods](lessons/02-pods.md) — ✅ done
+- 03 — Deployments & ReplicaSets — 🚧 in progress
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

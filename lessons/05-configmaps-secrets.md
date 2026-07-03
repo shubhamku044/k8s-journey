@@ -22,10 +22,10 @@ that don't exist in the base image = injected at runtime).
 
 ## Secret (sensitive data) — SAME mechanics, big gotcha
 ```bash
-kubectl create secret generic db-secret --from-literal=DB_PASSWORD=SuperSecret123
-kubectl get secret db-secret -o yaml     # data: DB_PASSWORD: U3VwZXJTZWNyZXQxMjM= (base64)
+kubectl create secret generic db-secret --from-literal=DB_PASSWORD='<your-password>'
+kubectl get secret db-secret -o yaml     # data: DB_PASSWORD: <base64-blob> (encoded, not encrypted)
 kubectl get secret db-secret -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode; echo
-# -> SuperSecret123   (no key, no permission — base64 is NOT encryption)
+# -> prints the plaintext password (no key, no permission — base64 is NOT encryption)
 ```
 Injected via `envFrom: [{secretRef: {name: db-secret}}]` alongside the ConfigMap.
 

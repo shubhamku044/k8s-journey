@@ -69,7 +69,7 @@ Service types: **ClusterIP** (internal only) → **NodePort** (dev/test external
 ## ConfigMaps & Secrets (config separate from image)
 ```bash
 kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
-kubectl create secret generic db-secret --from-literal=DB_PASSWORD=SuperSecret123
+kubectl create secret generic db-secret --from-literal=DB_PASSWORD='<your-password>'
 kubectl get configmap app-config -o yaml
 kubectl get secret db-secret -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode; echo  # base64 != encryption
 kubectl exec <pod> -- env | grep -E 'APP|DB'      # verify injected env vars

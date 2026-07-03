@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue          # non-sensitive config — safe to commit to git
+  APP_MODE: production
+# NOTE: sensitive values (passwords, API keys) belong in a Secret, NOT here —
+# and a Secret's YAML (base64) must never be committed to git.

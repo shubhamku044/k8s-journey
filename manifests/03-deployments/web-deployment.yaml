@@ -1,0 +1,21 @@
+apiVersion: apps/v1 # which API group/version this object belongs to
+kind: Deployment # what kind of object we're declaring
+metadata:
+  name: web # the Deployment's name
+  labels:
+    app: web
+spec:
+  replicas: 4 # DESIRED count — the number you kept changing with `scale`
+  selector:
+    matchLabels:
+      app: web # "I manage Pods that carry the label app=web"
+  template: # the Pod blueprint the ReplicaSet stamps out
+    metadata:
+      labels:
+        app: web # each Pod gets this label — MUST match the selector above
+    spec:
+      containers:
+        - name: web
+          image: nginx
+          ports:
+            - containerPort: 80

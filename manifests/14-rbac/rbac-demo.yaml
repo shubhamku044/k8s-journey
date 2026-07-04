@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceAccount # the identity we'll grant permissions to
+metadata:
+  name: viewer
+  namespace: rbac-demo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role # WHAT: read-only access to pods, in rbac-demo only
+metadata:
+  name: pod-reader
+  namespace: rbac-demo
+rules:
+  - apiGroups: [""] # "" = the core API group (pods, services, secrets…)
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"] # note: NO create/delete, and NO secrets
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding # WHO: give the 'pod-reader' Role to the 'viewer' ServiceAccount
+metadata:
+  name: viewer-reads-pods
+  namespace: rbac-demo
+subjects:
+  - kind: ServiceAccount
+    name: viewer
+    namespace: rbac-demo
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io

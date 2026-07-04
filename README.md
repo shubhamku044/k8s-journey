@@ -11,7 +11,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [04 — Services & networking](lessons/04-services.md) — ✅ done
 - [05 — ConfigMaps & Secrets](lessons/05-configmaps-secrets.md) — ✅ done
 - [06 — Volumes & persistent storage](lessons/06-volumes-storage.md) — ✅ done
-- 07 — Namespaces (organizing resources) — 🚧 next
+- [07 — Namespaces](lessons/07-namespaces.md) — ✅ done
+- 08 — StatefulSets — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

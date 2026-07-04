@@ -1,0 +1,77 @@
+# ============================================================
+# Capstone — DATA TIER: PostgreSQL
+# Namespace: capstone
+# The Secret 'db-secret' (POSTGRES_PASSWORD) is created IMPERATIVELY,
+# never committed here (Lesson 5 rule: no secret values in git).
+# ============================================================
+
+# --- Lesson 6: durable storage so DB data survives Pod restarts ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
+# --- Lesson 3: a Deployment manages the Postgres Pod ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db                      # must match the Pod label below (Lesson 3)
+  template:
+    metadata:
+      labels:
+        app: db                    # Lesson 4: the Service selects Pods by this label
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            # --- Lesson 5: inject the password FROM the Secret (single env var) ---
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+            # gotcha: Postgres needs a SUBDIRECTORY of the mount, not its root
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            # --- Lesson 6: mount the PVC where Postgres stores its data ---
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          # --- Lesson 9: don't route traffic until Postgres is actually ready ---
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: db-pvc
+---
+# --- Lesson 4: a stable internal address 'db:5432' for the app tier to reach ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ClusterIP                  # internal ONLY — never expose a database externally
+  selector:
+    app: db
+  ports:
+    - port: 5432
+      targetPort: 5432

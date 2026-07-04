@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  ADMINER_DEFAULT_SERVER: db # non-sensitive config — safe to commit to git
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminer
+  labels:
+    app: adminer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminer
+  template:
+    metadata:
+      labels:
+        app: adminer
+    spec:
+      containers:
+        - name: adminer
+          image: adminer
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-config
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 300m
+          # liveness = lightweight "is the process alive?" → just check the port is open.
+          # tcpSocket won't time out on a slow page render, so it won't crash-loop a healthy app.
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          # readiness = the meaningful HTTP check that gates traffic.
+          # timeoutSeconds: 5 because adminer's single-threaded PHP server can take >1s (default).
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adminer
+  labels:
+    app: adminer
+spec:
+  type: NodePort
+  selector:
+    app: adminer
+  ports:
+    - port: 8080 # the Service's own port (inside the cluster)
+      targetPort: 8080

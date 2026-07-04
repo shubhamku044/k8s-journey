@@ -94,3 +94,10 @@ teams), collision-free naming (names unique per-namespace; identity = namespace+
 for resource quotas and RBAC. Namespaced: Pods, Deployments, Services, ConfigMaps, Secrets, PVCs.
 NOT namespaced (cluster-scoped): Nodes, PersistentVolumes, StorageClasses, Namespaces themselves.
 Cross-namespace access uses DNS `service.namespace.svc.cluster.local`.
+
+### Q: Deployment vs StatefulSet — when do you need a StatefulSet?
+When Pods are NOT interchangeable and need a lasting identity across restarts: a **stable name**
+(`web-0`, `web-1`), **stable network DNS** (via a headless Service, `clusterIP: None`), and their
+**own persistent volume** (`volumeClaimTemplates` → one PVC per Pod), plus **ordered** create/scale/
+delete. Use for databases and clustered stateful systems (Kafka, Cassandra, Elasticsearch,
+Zookeeper). Stateless, interchangeable workloads → Deployment.

@@ -105,6 +105,17 @@ kubectl delete namespace dev                   # CASCADES — deletes everything
 - Namespaced: Pods/Deploy/Svc/CM/Secret/PVC. Cluster-scoped: Nodes/PV/StorageClass/Namespaces.
 - Cross-ns DNS: `service.namespace.svc.cluster.local` (or short `service.namespace`).
 
+## StatefulSets (stable identity + per-Pod storage)
+```bash
+kubectl apply -f web-statefulset.yaml   # headless Service (clusterIP: None) + StatefulSet
+kubectl get pods                        # stable ordinals: web-sts-0, web-sts-1 (not random)
+kubectl get pvc                         # one PVC per Pod: data-web-sts-0, data-web-sts-1
+kubectl delete pod web-sts-0            # returns as SAME name, reattached to its own volume
+```
+- StatefulSet = stable name + stable DNS (headless Service) + own PVC (volumeClaimTemplates) + ordered ops.
+- Use for NON-interchangeable Pods: databases, Kafka, Cassandra, Elasticsearch, Zookeeper.
+- Stateless/interchangeable → Deployment; stateful with per-instance identity → StatefulSet.
+
 
 ## Handy flags
 - `-o wide` — more columns

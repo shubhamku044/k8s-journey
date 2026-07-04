@@ -12,7 +12,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [05 — ConfigMaps & Secrets](lessons/05-configmaps-secrets.md) — ✅ done
 - [06 — Volumes & persistent storage](lessons/06-volumes-storage.md) — ✅ done
 - [07 — Namespaces](lessons/07-namespaces.md) — ✅ done
-- 08 — StatefulSets — 🚧 next
+- [08 — StatefulSets](lessons/08-statefulsets.md) — ✅ done
+- 09 — Health checks (liveness & readiness probes) — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adminer
+  namespace: capstone
+spec:
+  rules:
+    - host: adminer.local # route requests for this hostname...
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: adminer # ...to your existing adminer Service
+                port:
+                  number: 8080

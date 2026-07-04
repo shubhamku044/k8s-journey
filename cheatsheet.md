@@ -132,6 +132,16 @@ helm uninstall rel -n ns                  # remove the whole release
   installed instance with revision history.
 - Wins over raw kubectl: templating (one chart, many envs) + rollback/version history + reusable charts.
 
+## RBAC (who can do what — advanced)
+```bash
+kubectl auth can-i list pods --as=system:serviceaccount:<ns>:<sa> -n <ns>   # test perms AS a subject
+kubectl auth can-i --list --as=<subject> -n <ns>                            # everything a subject can do
+```
+- **Role** = permissions (verbs on resources) in a namespace; **ClusterRole** = cluster-wide.
+- **RoleBinding** = grants a Role to a subject (User/Group/ServiceAccount); **ClusterRoleBinding** = cluster-wide.
+- Deny-by-default + additive; no deny rules. A Role does nothing until bound.
+- Secures Secrets: only identities bound to a role permitting `get`/`list` on `secrets` can read them.
+
 ## StatefulSets (stable identity + per-Pod storage)
 ```bash
 kubectl apply -f web-statefulset.yaml   # headless Service (clusterIP: None) + StatefulSet

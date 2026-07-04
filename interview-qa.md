@@ -110,6 +110,15 @@ parameters that fill the templates (overridable per environment with `--set`/val
 `helm upgrade`/`helm rollback` with versioned history (one-command undo) — plus reusable community
 charts for complex apps.
 
+### Q: How does RBAC work (Role vs RoleBinding), and how does it secure Secrets?
+Kubernetes is deny-by-default. A **Role** lists permissions (verbs like get/list/create on resources)
+within a namespace; a **RoleBinding** grants that Role to a **subject** (User, Group, or
+ServiceAccount). Both are required — a Role does nothing until bound. `ClusterRole`/
+`ClusterRoleBinding` are the cluster-wide versions (and for cluster-scoped resources like nodes).
+Rules are additive; there are no deny rules (absence = denied). This secures Secrets: only
+identities bound to a role permitting `get`/`list` on `secrets` can read them. Test with
+`kubectl auth can-i <verb> <resource> --as=<subject> -n <ns>`.
+
 ### Q: Deployment vs StatefulSet — when do you need a StatefulSet?
 When Pods are NOT interchangeable and need a lasting identity across restarts: a **stable name**
 (`web-0`, `web-1`), **stable network DNS** (via a headless Service, `clusterIP: None`), and their

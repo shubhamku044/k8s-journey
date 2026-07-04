@@ -22,6 +22,7 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 ## Advanced
 - [12 — Ingress](lessons/12-ingress.md) — ✅ done
 - [13 — Helm](lessons/13-helm.md) — ✅ done
+- [14 — RBAC](lessons/14-rbac.md) — ✅ done
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

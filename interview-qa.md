@@ -101,3 +101,13 @@ When Pods are NOT interchangeable and need a lasting identity across restarts: a
 **own persistent volume** (`volumeClaimTemplates` → one PVC per Pod), plus **ordered** create/scale/
 delete. Use for databases and clustered stateful systems (Kafka, Cassandra, Elasticsearch,
 Zookeeper). Stateless, interchangeable workloads → Deployment.
+
+### Q: Liveness vs readiness vs startup probe — what happens when each fails?
+- **Liveness** fail → kubelet **restarts** the container (recovers a hung/deadlocked app).
+- **Readiness** fail → Pod is **removed from the Service's endpoints** (stops receiving traffic)
+  but is **NOT restarted**; it rejoins automatically when the probe passes again.
+- **Startup** → for slow-starting apps; **disables liveness/readiness until it succeeds** so a slow
+  boot isn't mistaken for a dead app.
+Methods: httpGet, tcpSocket, exec. For a temporary dependency outage (e.g. DB down) use a
+**readiness** probe, never liveness — restarting can't fix an external outage and causes restart
+storms.

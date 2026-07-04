@@ -116,6 +116,22 @@ kubectl delete pod web-sts-0            # returns as SAME name, reattached to it
 - Use for NON-interchangeable Pods: databases, Kafka, Cassandra, Elasticsearch, Zookeeper.
 - Stateless/interchangeable → Deployment; stateful with per-instance identity → StatefulSet.
 
+## Health checks (probes)
+```yaml
+livenessProbe:  { httpGet: {path: /, port: 80}, initialDelaySeconds: 5, periodSeconds: 5 }
+readinessProbe: { exec: {command: ["cat","/tmp/ready"]}, periodSeconds: 3 }
+startupProbe:   { httpGet: {path: /, port: 80}, failureThreshold: 30, periodSeconds: 10 }
+```
+```bash
+kubectl get pods                 # READY column reflects readiness; RESTARTS reflects liveness
+kubectl get endpoints <svc>      # readiness gates whether a Pod appears here (gets traffic)
+kubectl describe pod <pod>       # Events show "Liveness/Readiness probe failed"
+```
+- **Liveness** fail → kubelet RESTARTS the container.
+- **Readiness** fail → Pod removed from Service endpoints (no traffic), NOT restarted.
+- **Startup** → protects slow starters; disables liveness/readiness until it passes.
+- Methods: httpGet · tcpSocket · exec. Use readiness (not liveness) for external-dependency blips.
+
 
 ## Handy flags
 - `-o wide` — more columns

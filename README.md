@@ -19,6 +19,9 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 
 **🎉 Core curriculum complete — 11/11 lessons.**
 
+## Advanced
+- [12 — Ingress](lessons/12-ingress.md) — ✅ done
+
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)
 - [Gotchas & fixes](gotchas.md)

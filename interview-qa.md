@@ -95,6 +95,13 @@ for resource quotas and RBAC. Namespaced: Pods, Deployments, Services, ConfigMap
 NOT namespaced (cluster-scoped): Nodes, PersistentVolumes, StorageClasses, Namespaces themselves.
 Cross-namespace access uses DNS `service.namespace.svc.cluster.local`.
 
+### Q: Ingress vs Service? What's the resource-vs-controller distinction?
+A Service exposes one app (NodePort = a random high port; LoadBalancer = one cloud LB each). An
+**Ingress** is a single L7 HTTP entry point (port 80/443) that routes by **host and/or path** to
+many Services and can terminate TLS. It has two parts: the **Ingress resource** (the routing rules,
+just data) and the **Ingress controller** (a running reverse-proxy like nginx that watches
+resources and actually routes) — you need both, or the rules do nothing.
+
 ### Q: Deployment vs StatefulSet — when do you need a StatefulSet?
 When Pods are NOT interchangeable and need a lasting identity across restarts: a **stable name**
 (`web-0`, `web-1`), **stable network DNS** (via a headless Service, `clusterIP: None`), and their

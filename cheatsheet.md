@@ -105,6 +105,18 @@ kubectl delete namespace dev                   # CASCADES — deletes everything
 - Namespaced: Pods/Deploy/Svc/CM/Secret/PVC. Cluster-scoped: Nodes/PV/StorageClass/Namespaces.
 - Cross-ns DNS: `service.namespace.svc.cluster.local` (or short `service.namespace`).
 
+## Ingress (single HTTP front door — advanced)
+```bash
+minikube addons enable ingress              # install the nginx Ingress CONTROLLER
+kubectl get pods -n ingress-nginx           # controller must be 1/1 Running
+kubectl apply -f ingress.yaml               # the Ingress RESOURCE (host/path -> Service rules)
+kubectl get ingress -n <ns>
+minikube tunnel                             # mac/docker: bind ingress to 127.0.0.1:80 (sudo)
+curl -H "Host: adminer.local" http://127.0.0.1/   # test a host rule
+```
+- **Resource** = routing rules (data); **controller** = the proxy that enforces them. Need both.
+- Route many apps via one port 80: by host (`a.local`/`b.local`) or by path (`/a`, `/b`); add TLS here.
+
 ## StatefulSets (stable identity + per-Pod storage)
 ```bash
 kubectl apply -f web-statefulset.yaml   # headless Service (clusterIP: None) + StatefulSet

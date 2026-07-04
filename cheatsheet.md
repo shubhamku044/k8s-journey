@@ -91,6 +91,20 @@ kubectl get pv                      # PV auto-provisioned by the StorageClass
 - Many concurrent writers → use a **database** (owns concurrency), not a shared volume.
   Stateful pods (DB/Kafka/etc) → **StatefulSet**, each pod its own PVC.
 
+## Namespaces (organize & isolate)
+```bash
+kubectl get namespaces
+kubectl get pods -n kube-system                # peek at cluster components
+kubectl create namespace dev
+kubectl create deployment nginx-dev --image=nginx -n dev
+kubectl get pods -n dev                        # -n selects the namespace (default: 'default')
+kubectl config set-context --current --namespace=dev   # set default ns, skip -n
+kubectl delete namespace dev                   # CASCADES — deletes everything inside
+```
+- Names unique per-namespace (identity = namespace+name); same name can exist in two namespaces.
+- Namespaced: Pods/Deploy/Svc/CM/Secret/PVC. Cluster-scoped: Nodes/PV/StorageClass/Namespaces.
+- Cross-ns DNS: `service.namespace.svc.cluster.local` (or short `service.namespace`).
+
 
 ## Handy flags
 - `-o wide` — more columns

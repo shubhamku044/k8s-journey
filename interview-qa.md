@@ -87,3 +87,10 @@ file), and even then a filesystem gives no transactions/isolation, so concurrent
 data. Real systems keep app Pods **stateless** and route writes to **one database** that owns
 concurrency (transactions, locks, isolation). Genuinely stateful workloads use a **StatefulSet**
 where each Pod gets its own private PVC.
+
+### Q: What do namespaces solve, and what is NOT namespaced?
+Namespaces are virtual partitions within one cluster for isolation/organization (dev/staging/prod,
+teams), collision-free naming (names unique per-namespace; identity = namespace+name), and a scope
+for resource quotas and RBAC. Namespaced: Pods, Deployments, Services, ConfigMaps, Secrets, PVCs.
+NOT namespaced (cluster-scoped): Nodes, PersistentVolumes, StorageClasses, Namespaces themselves.
+Cross-namespace access uses DNS `service.namespace.svc.cluster.local`.

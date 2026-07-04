@@ -102,6 +102,14 @@ many Services and can terminate TLS. It has two parts: the **Ingress resource** 
 just data) and the **Ingress controller** (a running reverse-proxy like nginx that watches
 resources and actually routes) — you need both, or the rules do nothing.
 
+### Q: What is Helm — chart vs values vs release, and why over raw kubectl?
+Helm is the K8s package manager. A **chart** is a templated manifest package; **values** are the
+parameters that fill the templates (overridable per environment with `--set`/values files); a
+**release** is a named installed instance of a chart with a **revision history**. Over raw
+`kubectl apply` it adds templating (one chart → dev/staging/prod), release management, and
+`helm upgrade`/`helm rollback` with versioned history (one-command undo) — plus reusable community
+charts for complex apps.
+
 ### Q: Deployment vs StatefulSet — when do you need a StatefulSet?
 When Pods are NOT interchangeable and need a lasting identity across restarts: a **stable name**
 (`web-0`, `web-1`), **stable network DNS** (via a headless Service, `clusterIP: None`), and their

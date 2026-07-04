@@ -117,6 +117,21 @@ curl -H "Host: adminer.local" http://127.0.0.1/   # test a host rule
 - **Resource** = routing rules (data); **controller** = the proxy that enforces them. Need both.
 - Route many apps via one port 80: by host (`a.local`/`b.local`) or by path (`/a`, `/b`); add TLS here.
 
+## Helm (package manager — advanced)
+```bash
+helm create mychart                       # scaffold a chart
+helm template rel ./mychart               # render templates locally (values filled in)
+helm install rel ./mychart -n ns --create-namespace
+helm list -n ns                           # releases + REVISION
+helm upgrade rel ./mychart -n ns --set replicaCount=3   # change via value → new revision
+helm history rel -n ns                    # revision history
+helm rollback rel 1 -n ns                 # one-command undo to revision 1
+helm uninstall rel -n ns                  # remove the whole release
+```
+- **Chart** = templated package; **values** = params (`values.yaml` / `--set`); **release** = a named
+  installed instance with revision history.
+- Wins over raw kubectl: templating (one chart, many envs) + rollback/version history + reusable charts.
+
 ## StatefulSets (stable identity + per-Pod storage)
 ```bash
 kubectl apply -f web-statefulset.yaml   # headless Service (clusterIP: None) + StatefulSet

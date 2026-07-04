@@ -14,7 +14,8 @@ Hands-on notes, manifests, and gotchas as I learn Kubernetes from scratch — pr
 - [07 — Namespaces](lessons/07-namespaces.md) — ✅ done
 - [08 — StatefulSets](lessons/08-statefulsets.md) — ✅ done
 - [09 — Health checks (probes)](lessons/09-probes.md) — ✅ done
-- 10 — Autoscaling (HPA) — 🚧 next
+- [10 — Autoscaling (HPA)](lessons/10-hpa.md) — ✅ done
+- 11 — Capstone: multi-tier app — 🚧 next
 
 ## Reference
 - [kubectl / minikube cheatsheet](cheatsheet.md)

@@ -111,3 +111,14 @@ Zookeeper). Stateless, interchangeable workloads → Deployment.
 Methods: httpGet, tcpSocket, exec. For a temporary dependency outage (e.g. DB down) use a
 **readiness** probe, never liveness — restarting can't fix an external outage and causes restart
 storms.
+
+### Q: What is an HPA, what does it need, and how does it decide?
+Horizontal Pod Autoscaler adds/removes **Pods** to keep a metric (CPU/memory/custom) near a target,
+between min and max replicas. It needs **resource requests** on the Pods (the baseline it computes
+% against) and a **metrics source** (metrics-server). Scale-down uses a stabilization window to
+avoid flapping. Horizontal = more Pods; vertical (VPA) = bigger Pods.
+
+### Q: request vs limit?
+request = CPU/RAM **reserved & guaranteed** for a container (used for scheduling and as the HPA
+baseline); limit = the **maximum** it may use (CPU throttled, memory OOM-killed). About hardware,
+not HTTP traffic. `200m` CPU = 0.2 of a core.

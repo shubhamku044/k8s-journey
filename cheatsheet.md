@@ -132,6 +132,19 @@ kubectl describe pod <pod>       # Events show "Liveness/Readiness probe failed"
 - **Startup** → protects slow starters; disables liveness/readiness until it passes.
 - Methods: httpGet · tcpSocket · exec. Use readiness (not liveness) for external-dependency blips.
 
+## Autoscaling (HPA) + resources
+```bash
+minikube addons enable metrics-server                        # HPA needs a metrics source
+kubectl set resources deploy X --requests=cpu=200m --limits=cpu=500m  # HPA needs requests
+kubectl top pods                                             # live CPU/mem usage
+kubectl autoscale deploy X --cpu-percent=50 --min=1 --max=5  # create HPA
+kubectl get hpa -w                                           # watch TARGETS % and REPLICAS
+```
+- **request** = reserved/guaranteed CPU/RAM (scheduling + HPA baseline); `200m` = 0.2 core.
+- **limit** = max CPU/RAM (CPU throttled, memory OOM-killed). NOT about HTTP traffic.
+- HPA scales Pods (horizontal) to keep a metric near target, between min/max; scale-down has a
+  stabilization/cooldown window. Needs requests + metrics-server.
+
 
 ## Handy flags
 - `-o wide` — more columns
